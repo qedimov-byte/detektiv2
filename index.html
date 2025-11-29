@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hüquq nədir? · Detektiv Arxiv</title>
+  <style>
+    :root {
+      --bg: #02010a;
+      --text-main: #fef3c7;
+      --border-accent: rgba(244, 193, 92, 0.25);
+      --accent: #f4c15c;
+      --accent-soft: rgba(244, 193, 92, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* Kitab qapağı – arxa fon */
+    .page-bg-cover {
+      position: fixed;
+      inset: 0;
+      background-image: url("huquq-nedir-cover.png");
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: contain;
+      opacity: 0.15;
+      filter: brightness(0.7) contrast(0.85);
+      mix-blend-mode: lighten;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Logo üst hissədə mərkəzdə */
+    .logo-container {
+      width: 100%;
+      padding-top: 25px;
+      padding-bottom: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .logo-container img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(244, 193, 92, 0.85));
+    }
+
+    .detective-title {
+  margin-top: 14px;
+  padding: 10px 28px;
+  font-size: 1.45rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: #ffeaea;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 999px;
+
+  background: rgba(255, 0, 0, 0.12);
+  border: 1px solid rgba(255, 60, 60, 0.85);
+
+  text-shadow:
+    0 0 8px rgba(255, 60, 60, 1),
+    0 0 18px rgba(255, 0, 0, 0.9),
+    0 0 24px rgba(255, 0, 0, 0.6);
+
+  box-shadow:
+    0 0 18px rgba(255, 60, 60, 0.5),
+    0 0 34px rgba(255, 0, 0, 0.6);
+
+  animation: flicker 2.5s infinite;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 8px rgba(255, 80, 80, 1),
+      0 0 20px rgba(255, 0, 0, 1),
+      0 0 30px rgba(255, 0, 0, 0.9);
+    box-shadow:
+      0 0 22px rgba(255, 80, 80, 0.8),
+      0 0 40px rgba(255, 0, 0, 0.7);
+  }
+
+  20%, 24%, 55% {
+    opacity: 0.4;
+    text-shadow:
+      0 0 4px rgba(255, 40, 40, 0.6),
+      0 0 10px rgba(255, 0, 0, 0.5);
+    box-shadow:
+      0 0 8px rgba(255, 40, 40, 0.4);
+  }
+
+  70% {
+    opacity: 0.75;
+    text-shadow:
+      0 0 6px rgba(255, 50, 50, 0.85),
+      0 0 16px rgba(255, 0, 0, 0.7);
+    box-shadow:
+      0 0 16px rgba(255, 50, 50, 0.6);
+  }
+}
+
+.detective-title::before,
+.detective-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 80, 80, 0.9),
+    transparent
+  );
+  animation: pulseLine 2.5s infinite;
+}
+
+@keyframes pulseLine {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+
+    /* Kart – əsas konteyner */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 960px;
+      margin: 10px auto 40px;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border-accent);
+      border-bottom: 1px solid var(--border-accent);
+      background: rgba(20, 30, 60, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .card h1 {
+      margin-top: 0;
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .card p.lead {
+      margin-top: 4px;
+      margin-bottom: 18px;
+      font-size: 0.98rem;
+      opacity: 0.9;
+    }
+
+    /* Sübut düymələri */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .evidence-btn {
+      position: relative;
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border-accent);
+      background: radial-gradient(circle at 0 0, var(--accent-soft), transparent 55%);
+      color: var(--text-main);
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .evidence-btn span.index {
+      font-weight: 600;
+      margin-right: 6px;
+      opacity: 0.85;
+    }
+
+    .evidence-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(244, 193, 92, 0.2);
+    }
+
+    .evidence-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 18px rgba(244, 193, 92, 0.35);
+      background: radial-gradient(circle at 0 0, rgba(244, 193, 92, 0.25), transparent 60%);
+    }
+
+    /* Sənəd görüntüləyici */
+    .doc-viewer {
+      position: relative;
+      border-radius: 14px;
+      border: 1px dashed rgba(248, 250, 252, 0.15);
+      padding: 16px 18px 20px;
+      background: rgba(3, 7, 18, 0.65);
+      box-shadow: 0 0 22px rgba(15, 23, 42, 0.8) inset;
+    }
+
+    .doc-placeholder {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      font-style: italic;
+    }
+
+    .doc {
+      display: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .doc.active {
+      display: block;
+    }
+
+    .doc-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    /* İpucu bölməsi üçün əlavə stil */
+.cipher-box {
+  border-radius: 12px;
+  border: 1px solid rgba(248, 250, 252, 0.15);
+  padding: 12px 14px;
+  background: rgba(15, 23, 42, 0.75);
+  margin-bottom: 12px;
+}
+
+.cipher-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.cipher-text {
+  font-family: "SF Mono", "JetBrains Mono", ui-monospace, monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.28em;
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 8px;
+  background: radial-gradient(circle at 0 0, rgba(244, 193, 92, 0.18), transparent 60%);
+}
+
+.clue-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.clue-input-row input {
+  flex: 1 1 140px;
+  min-width: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  padding: 8px 12px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  outline: none;
+}
+
+.clue-input-row input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(244, 193, 92, 0.5);
+}
+
+.clue-input-row button {
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  padding: 8px 16px;
+  background: radial-gradient(circle at 0 0, rgba(244, 193, 92, 0.32), transparent 60%);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.clue-input-row button:hover {
+  box-shadow: 0 0 14px rgba(244, 193, 92, 0.45);
+}
+
+.clue-hint {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.clue-result {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.clue-result.ok {
+  color: #bbf7d0;
+}
+
+.clue-result.err {
+  color: #fecaca;
+}
+
+.qr-wrapper {
+  margin-top: 14px;
+  text-align: center;
+  display: none;
+}
+
+.qr-wrapper img {
+  max-width: 260px;
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 0 22px rgba(0, 0, 0, 0.75);
+  opacity: 0.96;
+}
+
+.qr-caption {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+    
+    @media (max-width: 600px) {
+      .card {
+        padding: 20px 14px;
+      }
+
+      .card h1 {
+        font-size: 1.4rem;
+      }
+    }
+  
+  /* Logo altı Kripto Lab keçidi */
+.crypto-link-header {
+  margin-top: 6px;
+}
+
+.crypto-link-header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 193, 92, 0.8);
+  background: radial-gradient(circle at 0 0, rgba(244, 193, 92, 0.18), transparent 60%);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.crypto-link-header a span.icon {
+  font-size: 0.9rem;
+}
+
+.crypto-link-header a:hover {
+  box-shadow: 0 0 12px rgba(244, 193, 92, 0.5);
+  transform: translateY(-1px);
+}
+  
+  </style>
+</head>
+<body>
+
+  <!-- Arxa fon: kitab qapağı -->
+  <div class="page-bg-cover"></div>
+
+  <!-- Logo + başlıq -->
+  <div class="logo-container">
+    <img src="logo.png" alt="Hüquq nədir? Logo" />
+    <div class="detective-title">DETEKTİV OYUNU</div>
+
+    <!-- Kripto Lab keçidi – DETEKTİV OYUNU altı -->
+    <div class="crypto-link-header">
+      <!-- Fayl adını özündə necə saxlamısansa onu yaz: kripto-lab.html, crypto.html və s. -->
+      <a href="https://qedimov-byte.github.io/az-crypto/" target="_blank" rel="noopener">
+        <span class="icon">🧩</span>
+        <span>Kripto Lab · Şifrələri aç</span>
+      </a>
+    </div>
+  </div>
+
+
+  
+  
+
+<div class="card">
+  <h1>Detektiv Arxiv · Derya Güneş işi</h1>
+
+  
+
+  <!-- Dava qapağı şəkli – sübutlardan AYRI blok -->
+  <div style="
+    width: 100%;
+    margin: 24px 0 32px;
+    display: flex;
+    justify-content: center;
+  ">
+    <img
+      src="basliq.jpg"
+      alt="Ünlü şarkıcının ikizinin ölümü – dosya qapağı"
+      style="
+        width: 100%;
+        max-width: 560px;
+        border-radius: 12px;
+        box-shadow: 0 10px 26px rgba(0,0,0,0.65);
+      "
+    />
+  </div>
+
+    
+    
+    
+<p style="margin-top:18px; font-size:1rem;">
+  Aşağıdakı sənədlərə baxıb araşdırma edə bilərsən. 
+  Nəticələrini aşağıdakı Facebook və ya LinkedIn statuslarının şərh bölməsində yaz:
+</p>
+
+<p style="margin-top:10px;">
+  <strong>Facebook:</strong>
+  <a href="https://www.facebook.com/share/p/17k5uiMiXY/" 
+     target="_blank" 
+     rel="noopener"
+     style="color:#f4c15c; font-weight:600;">
+     Facebook paylaşımına keç →
+  </a>
+</p>
+
+<p style="margin-top:4px;">
+  <strong>LinkedIn:</strong>
+  <a href="https://www.linkedin.com/posts/ali-qadimov-6a5b44a0_detekti%CC%87v-oyunu-m%C9%99%C5%9Fhur-m%C3%BC%C4%9F%C9%99nninin-%C9%99kizinin-activity-7398614070234456064-g0Y0?utm_source=share&utm_medium=member_desktop&rcm=ACoAABWGpt0BkN93LGP8dcqsYNfLMaOvICPGc2c" 
+     target="_blank" 
+     rel="noopener"
+     style="color:#f4c15c; font-weight:600;">
+     LinkedIn paylaşımına keç →
+  </a>
+</p>
+
+
+  
+    <!-- Sübut düymələri -->
+    <div class="evidence-grid">
+      <button class="evidence-btn" data-doc="doc-overview">
+        <span class="index">01</span> Hadisə xülasəsi və qəzet xəbəri
+      </button>
+      <button class="evidence-btn" data-doc="doc-chat">
+        <span class="index">02</span> Mərhumun yazışmaları (Whatsapp)
+      </button>
+      <button class="evidence-btn" data-doc="doc-interview">
+        <span class="index">03</span> Məşhur müğənni ilə reportaj
+      </button>
+      <button class="evidence-btn" data-doc="doc-bank">
+        <span class="index">04</span> Şübhəlilərin bank çıxarışları
+      </button>
+      <button class="evidence-btn" data-doc="doc-calls">
+        <span class="index">05</span> Telefon danışıqları siyahısı
+      </button>
+      <button class="evidence-btn" data-doc="doc-death">
+        <span class="index">06</span> Ölüm haqqında rəsmi sənəd
+      </button>
+      <button class="evidence-btn" data-doc="doc-puzzle">
+        <span class="index">07</span> Söz tapmaca – gizli ipucu
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-ferit">
+        <span class="index">08</span> Şübhəli ifadəsi – Ferit Akyüz
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-cenk">
+        <span class="index">09</span> Şübhəli ifadəsi – Cenk Uzun
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-murat">
+        <span class="index">10</span> Şübhəli ifadəsi – Murat Gezin
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-melek">
+        <span class="index">11</span> Şübhəli ifadəsi – Melek Şahin
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-emrah">
+        <span class="index">12</span> Şübhəli ifadəsi – Emrah Bağcılar
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-demet">
+        <span class="index">13</span> Şübhəli ifadəsi – Demet Güneş
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-haydar">
+        <span class="index">14</span> Şübhəli ifadəsi – Haydar Kurulmuş
+      </button>
+      <button class="evidence-btn" data-doc="doc-statement-malik">
+  <span class="index">15</span> Şübhəli ifadəsi – Malik Bilgin
+</button>
+      <button class="evidence-btn" data-doc="doc-clue">
+  <span class="index">16</span> İpucu
+</button>
+    </div>
+
+    <!-- Sənəd görüntüləyici -->
+    <div class="doc-viewer">
+      
+
+      <!-- 01: Hadisə xülasəsi və qəzet xəbəri -->
+      <div class="doc" id="doc-overview">
+        <div class="doc-title">01 · Hadisə xülasəsi və qəzet xəbəri</div>
+        <img
+          src="qezet melumati.jpg"
+          alt="Hadisə barədə qəzet xəbəri"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <!-- 02: Yazışmalar -->
+      <div class="doc" id="doc-chat">
+        <div class="doc-title">02 · Mərhumun yazışmaları</div>
+        <img
+          src="danisiq qeydi.jpg"
+          alt="Mərhumun telefon yazışmaları"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <!-- 03: Reportaj -->
+      <div class="doc" id="doc-interview">
+        <div class="doc-title">03 · Xüsusi reportaj</div>
+        <img
+          src="reportaj.jpg"
+          alt="Müğənni ilə xüsusi reportaj"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <!-- 04: Bank çıxarışları -->
+      <div class="doc" id="doc-bank">
+        <div class="doc-title">04 · Bank sənədləri</div>
+        <img
+          src="bank melumatlari.jpg"
+          alt="Şübhəlilərin bank çıxarışları"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <!-- 05: Telefon danışıqları -->
+      <div class="doc" id="doc-calls">
+        <div class="doc-title">05 · Telefon danışıqları</div>
+        <img
+          src="telefon danisiqlari.jpg"
+          alt="Telefon danışıqları siyahısı"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <!-- 06: Ölüm sənədi -->
+      <div class="doc" id="doc-death">
+        <div class="doc-title">06 · Ölüm haqqında rəsmi sənəd</div>
+        <img
+          src="ölüm senedi.jpg"
+          alt="Ölüm haqqında rəsmi sənəd"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <!-- 07: Tapmaca -->
+      <div class="doc" id="doc-puzzle">
+        <div class="doc-title">07 · Söz tapmaca ipucusu</div>
+        <img
+          src="tapmaca.jpg"
+          alt="Söz tapmaca – gizli ipucu"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <!-- 08–14: İfadələr -->
+      <div class="doc" id="doc-statement-ferit">
+        <div class="doc-title">08 · Şübhəli ifadəsi – Ferit Akyüz</div>
+        <img
+          src="ifade - ferid akyuz.jpg"
+          alt="Şübhəli ifadəsi - Ferit Akyüz"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <div class="doc" id="doc-statement-cenk">
+        <div class="doc-title">09 · Şübhəli ifadəsi – Cenk Uzun</div>
+        <img
+          src="ifade- ceng uzun.jpg"
+          alt="Şübhəli ifadəsi - Cenk Uzun"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <div class="doc" id="doc-statement-murat">
+        <div class="doc-title">10 · Şübhəli ifadəsi – Murat Gezin</div>
+        <img
+          src="ifade-murat gezgin.jpg"
+          alt="Şübhəli ifadəsi - Murat Gezin"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <div class="doc" id="doc-statement-melek">
+        <div class="doc-title">11 · Şübhəli ifadəsi – Melek Şahin</div>
+        <img
+          src="ifade-melek sahin.jpg"
+          alt="Şübhəli ifadəsi - Melek Şahin"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <div class="doc" id="doc-statement-emrah">
+        <div class="doc-title">12 · Şübhəli ifadəsi – Emrah Bağcılar</div>
+        <img
+          src="ifade-emrah balcilar.jpg"
+          alt="Şübhəli ifadəsi - Emrah Bağcılar"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <div class="doc" id="doc-statement-demet">
+        <div class="doc-title">13 · Şübhəli ifadəsi – Demet Güneş</div>
+        <img
+          src="ifade-demet gunes.jpg"
+          alt="Şübhəli ifadəsi - Demet Güneş"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+      <div class="doc" id="doc-statement-haydar">
+        <div class="doc-title">14 · Şübhəli ifadəsi – Haydar Kurulmuş</div>
+        <img
+          src="ifade-haydar kurtulmus.jpg"
+          alt="Şübhəli ifadəsi - Haydar Kurulmuş"
+          style="width: 100%; border-radius: 12px; margin-top: 10px;
+                 box-shadow: 0 0 18px rgba(0,0,0,0.55); opacity: 0.93;"
+        />
+      </div>
+
+<div class="doc" id="doc-statement-malik">
+  <div class="doc-title">15 · Şübhəli ifadəsi – Malik Bilgin</div>
+
+  <img 
+    src="ifade - malik bilgin.jpg" 
+    alt="Şübhəli ifadəsi - Malik Bilgin"
+    style="
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 10px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      opacity: 0.92;
+    "
+  />
+</div>
+      <!-- 16: Vigenere İpucu -->
+<div class="doc" id="doc-clue">
+  <div class="doc-title">16 · İpucu</div>
+
+  <div class="cipher-box">
+    <div class="cipher-label">
+      Şifrəli mətn:
+    </div>
+    <div class="cipher-text">
+      Yhgçfss uynqyçfı
+    </div>
+    <div class="clue-hint">
+      🔐 Məsləhət: Kripto lab səhifəsindən istifadə edə bilərsən.
+      Açar cinayət işi ilə bağlıdır.
+    </div>
+  </div>
+
+  <div class="clue-input-row">
+    <input
+      id="clue-answer"
+      type="text"
+      placeholder="Buraya açdığın sözü yaz..."
+      autocomplete="off"
+    />
+    <button id="check-clue" type="button">
+      Cavabı yoxla
+    </button>
+  </div>
+
+  <div id="clue-result" class="clue-result"></div>
+
+  <div id="qr-wrapper" class="qr-wrapper">
+    <img
+      src="ipucu-telefon danisigi.png"
+      alt="Gizli QR ipucu"
+    />
+    <div class="qr-caption">
+      ✅ Şifrəni düzgün açdın. Bu QR kod növbəti mərhələyə aparır.
+    </div>
+  </div>
+</div>
+
+
+      
+      
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll(".evidence-btn");
+    const docs = document.querySelectorAll(".doc");
+    const placeholder = document.getElementById("doc-placeholder");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-doc");
+        const targetDoc = document.getElementById(targetId);
+
+        buttons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        if (placeholder) {
+          placeholder.style.display = "none";
+        }
+
+        docs.forEach((doc) => doc.classList.remove("active"));
+
+        if (targetDoc) {
+          targetDoc.classList.add("active");
+        }
+      });
+    });
+
+const CLUE_ANSWER = "telefon danışığı".toLowerCase().replace(/\s+/g, "");
+
+  const answerInput = document.getElementById("clue-answer");
+  const checkButton = document.getElementById("check-clue");
+  const clueResult = document.getElementById("clue-result");
+  const qrWrapper = document.getElementById("qr-wrapper");
+
+  if (checkButton) {
+    checkButton.addEventListener("click", () => {
+      if (!answerInput) return;
+
+      const value = (answerInput.value || "")
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "");
+
+      if (!value) {
+        clueResult.textContent = "Əvvəl cavabı yaz.";
+        clueResult.className = "clue-result err";
+        return;
+      }
+
+      if (value === CLUE_ANSWER) {
+        clueResult.textContent = "Düzgündür! Şifrənin cavabı ‘Telefon danışığı’dır.";
+        clueResult.className = "clue-result ok";
+        if (qrWrapper) {
+          qrWrapper.style.display = "block";
+        }
+      } else {
+        clueResult.textContent = "Uyğun gəlmədi. Bir daha cəhd et – bəlkə açarı səhv tətbiq etmisən?";
+        clueResult.className = "clue-result err";
+        if (qrWrapper) {
+          qrWrapper.style.display = "none";
+        }
+      }
+    });
+  }
+</script>
+    
+  
+
+</body>
+</html>
